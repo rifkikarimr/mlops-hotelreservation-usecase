@@ -2,4 +2,4 @@ venv/
 mlruns/
 logs/
 Hotel_Reservation_Project.egg-info/
-vscode/
+.vscode/
