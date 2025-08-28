@@ -13,7 +13,6 @@ pipeline{
                 script{
                     echo 'Cloning Github repo to Jenkins............'
                     checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/rifkikarimr/mlops-hotelreservation-usecase.git']])
-                }
             }
         }
 
@@ -46,9 +45,9 @@ pipeline{
 
                         gcloud auth configure-docker --quiet
 
-                        docker build -t gcr.io/${GCP_PROJECT}/ml-project:latest .
+                        docker build -t asia-southeast2-docker.pkg.dev/${GCP_PROJECT}/ml-images/hotel-reserve:v1.0 .
 
-                        docker push gcr.io/${GCP_PROJECT}/ml-project:latest 
+                        docker push asia-southeast2-docker.pkg.dev/${GCP_PROJECT}/ml-images/hotel-reserve:v1.0 
 
                         '''
                     }
@@ -71,9 +70,9 @@ pipeline{
                         gcloud config set project ${GCP_PROJECT}
 
                         gcloud run deploy ml-project \
-                            --image=gcr.io/${GCP_PROJECT}/ml-project:latest \
+                            --image=asia-southeast2-docker.pkg.dev/${GCP_PROJECT}/ml-images/hotel-reserve:v1.0 \
                             --platform=managed \
-                            --region=us-central1 \
+                            --region=asia-southeast2 \
                             --allow-unauthenticated
                             
                         '''
