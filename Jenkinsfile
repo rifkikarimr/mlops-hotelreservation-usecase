@@ -22,8 +22,8 @@ pipeline{
                 script{
                     echo 'Setting up our Virtual Environment and Installing dependancies............'
                     sh '''
-                    /usr/local/bin/python3.11 -m venv venv
-                    . venv/bin/activate
+                    python -m venv ${VENV_DIR}
+                    . ${VENV_DIR}/bin/activate
                     pip install --upgrade pip
                     pip install -e .
                     '''
