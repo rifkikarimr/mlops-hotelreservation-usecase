@@ -72,7 +72,7 @@ pipeline{
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         gcloud config set project ${GCP_PROJECT}
                         gcloud auth configure-docker  asia-southeast2-docker.pkg.dev --quiet
-                        docker build -t asia-southeast2-docker.pkg.dev/${GCP_PROJECT}/ml-images/hotel-reserve:v1.0 .
+                        docker buildx build --platform linux/amd64 -t asia-southeast2-docker.pkg.dev/${GCP_PROJECT}/ml-images/hotel-reserve:v1.0 .
                         docker push asia-southeast2-docker.pkg.dev/${GCP_PROJECT}/ml-images/hotel-reserve:v1.0
                         '''
                     }
