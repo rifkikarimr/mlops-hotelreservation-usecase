@@ -31,36 +31,36 @@ pipeline{
             }
         }
 
-        stage('Debug GCP Authentication') {
-            steps {
-                withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
-                    script {
-                        sh '''
-                        echo "--- 1. Verifying Service Account Activation ---"
-                        # Activate the service account (corrected command)
-                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
+        // stage('Debug GCP Authentication') {
+        //     steps {
+        //         withCredentials([file(credentialsId: 'gcp-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+        //             script {
+        //                 sh '''
+        //                 echo "--- 1. Verifying Service Account Activation ---"
+        //                 # Activate the service account (corrected command)
+        //                 gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         
-                        # Now, verify which account is active
-                        echo "Successfully activated account:"
-                        gcloud config get-value account
+        //                 # Now, verify which account is active
+        //                 echo "Successfully activated account:"
+        //                 gcloud config get-value account
                         
-                        echo "--- 2. Verifying IAM Roles for the Account ---"
-                        ACCOUNT_EMAIL=$(gcloud config get-value account)
-                        echo "Checking roles for account: ${ACCOUNT_EMAIL}"
-                        gcloud projects get-iam-policy ${GCP_PROJECT} --format="json" | jq -r --arg USER "serviceAccount:${ACCOUNT_EMAIL}" '.bindings[] | select(.members[] | contains($USER)) | .role'
+        //                 echo "--- 2. Verifying IAM Roles for the Account ---"
+        //                 ACCOUNT_EMAIL=$(gcloud config get-value account)
+        //                 echo "Checking roles for account: ${ACCOUNT_EMAIL}"
+        //                 gcloud projects get-iam-policy ${GCP_PROJECT} --format="json" | jq -r --arg USER "serviceAccount:${ACCOUNT_EMAIL}" '.bindings[] | select(.members[] | contains($USER)) | .role'
                         
-                        echo "--- 3. Testing Direct Artifact Registry Access ---"
-                        gcloud artifacts repositories list --location=asia-southeast2 --project=${GCP_PROJECT}
+        //                 echo "--- 3. Testing Direct Artifact Registry Access ---"
+        //                 gcloud artifacts repositories list --location=asia-southeast2 --project=${GCP_PROJECT}
 
-                        echo "--- 4. Verifying Docker Configuration ---"
-                        gcloud auth configure-docker asia-southeast2-docker.pkg.dev --quiet
-                        echo "Docker config file contents:"
-                        cat ~/.docker/config.json
-                        '''
-                    }
-                }
-            }
-        }
+        //                 echo "--- 4. Verifying Docker Configuration ---"
+        //                 gcloud auth configure-docker asia-southeast2-docker.pkg.dev --quiet
+        //                 echo "Docker config file contents:"
+        //                 cat ~/.docker/config.json
+        //                 '''
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Building and Pushing Docker Image to GCR'){
             steps{
