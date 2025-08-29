@@ -37,22 +37,22 @@ pipeline{
                     script {
                         sh '''
                         echo "--- 1. Verifying Service Account Activation ---"
-                        # This command will show which account is being activated.
-                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS} --display-account
+                        # Activate the service account (corrected command)
+                        gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         
-                        echo "--- 2. Verifying Project and Account Permissions ---"
-                        # Let's check the IAM policy directly for the activated account.
+                        # Now, verify which account is active
+                        echo "Successfully activated account:"
+                        gcloud config get-value account
+                        
+                        echo "--- 2. Verifying IAM Roles for the Account ---"
                         ACCOUNT_EMAIL=$(gcloud config get-value account)
                         echo "Checking roles for account: ${ACCOUNT_EMAIL}"
                         gcloud projects get-iam-policy ${GCP_PROJECT} --format="json" | jq -r --arg USER "serviceAccount:${ACCOUNT_EMAIL}" '.bindings[] | select(.members[] | contains($USER)) | .role'
                         
                         echo "--- 3. Testing Direct Artifact Registry Access ---"
-                        # This command tries to list repositories, which requires permissions.
-                        # If this fails, the core permission is still the issue.
                         gcloud artifacts repositories list --location=asia-southeast2 --project=${GCP_PROJECT}
 
                         echo "--- 4. Verifying Docker Configuration ---"
-                        # This configures Docker and then prints the resulting config file.
                         gcloud auth configure-docker asia-southeast2-docker.pkg.dev --quiet
                         echo "Docker config file contents:"
                         cat ~/.docker/config.json
