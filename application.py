@@ -1,6 +1,6 @@
 import joblib
 import numpy as np
-from config.paths_config import MODEL_OUTPUT_PATH
+from config.path_config import MODEL_OUTPUT_PATH
 from flask import Flask, render_template,request
 
 app = Flask(__name__)
