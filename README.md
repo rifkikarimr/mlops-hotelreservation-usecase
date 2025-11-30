@@ -13,6 +13,7 @@ Unlike traditional workflows where training and serving are separate, this pipel
 
 - **Language:** Python 3.x
 - **Web Framework:** Flask
+- **Experiment Tracking:** MLflow
 - **ML Libraries:** Scikit-learn, Pandas, NumPy, Joblib
 - **Containerization:** Docker
 - **CI/CD:** Jenkins
